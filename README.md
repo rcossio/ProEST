@@ -31,7 +31,7 @@ the cumulative distribution function are calculated.
 You should have installed AmberTools (available at http://ambermd.org/), in particular the script
 uses Cpptraj and ante-MMPBSA.py
 
-Also, a Python2.7 version is needed with access to Sys, Numpy and Random libraries. 
+Also, a Python2 version is needed with access to Sys, Numpy and Random libraries. 
 
 # More information
 For more information please check the example/ folder or write us to 
