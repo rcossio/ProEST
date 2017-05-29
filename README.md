@@ -23,7 +23,7 @@ After the indicated samples have been made, the probability distribution functio
 the cumulative distribution function are calculated.
 
 # More information
-For more information please write us to 
+For more information please check the example/ folder or write us to 
 
      sciprot.unq@gmail.com 
 
