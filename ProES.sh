@@ -1,3 +1,23 @@
+#!/bin/bash
+
+#    ProEST v1.0
+#    Copyright (C) 2017 Rodrigo Cossio-Perez
+#    under GPU GPL v3 Licence
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
 # 1. Reading arguments
 while [[ $# -ge 1 ]]
 do
@@ -5,13 +25,13 @@ case "$1" in
 
   -h|--help)
   echo "
-  ESSENTIAL SPACE CONVERGENCY TEST
+  ProEST - Protein Essential Space Test
   
   Usage: 
 
-    ./rmsip.sh --dim DIM --total TOTAL --concat CONCAT --traj TRAJECTORY.X --mask MASK --prmtop PRMTOP --prefix PREFIX --output OUTPUT --samples SAMPLES
+    ./ProEST.sh --dim DIM --total TOTAL --concat CONCAT --traj TRAJECTORY.X --mask MASK --prmtop PRMTOP --prefix PREFIX --output OUTPUT --samples SAMPLES
  
-  where DIM is the dimension of the protein subspace used in the RMSIP. 
+  where DIM is the list of dimensions of the protein subspace used in the RMSIP.
         TOTAL is the total number of molecular dynamics. It should be at least twice the CONCAT number.
         CONCAT is the number of trajectories concatenated for PCA.
         TRAJECTORY.X is the name of the trajectory files. The X will be replaced for numbers 1,2,3...,TOTAL
@@ -21,17 +41,11 @@ case "$1" in
         OUTPUT is the result of this analysis. It contains a probability and cumulative distribution function.
         SAMPLES is the number of samples used to make the distributions. 
 
-  For example, the command
-  
-    ./rmsip.sh --dim 3 --total 100 --concat 30 --traj system.X.mdcrd --mask \"@CA\" --prmtop system.noWAT.prmtop  --prefix _TEMP_ --output system.rmsip.dat --samples 1500
-
-  would make 1500 samples to test the convergency for subspace of dimension 3 comparing groups of 30 MDs from a total of 100.
-
   For more information please write us to 
 
      sciprot.unq@gmail.com 
 
-  or check the work done in
+  or check the following publication 
 
     \"Cossio-Pérez, R., Palma, J., & Pierdominici-Sottile, G. (2017). Consistent principal component modes 
     from molecular dynamics simulations of proteins. Journal of Chemical Information and Modeling.\"
@@ -89,10 +103,8 @@ case "$1" in
   shift
   ;;
 
-  
-
   *)
-  (>&2  echo "ERROR: Argument $1 was not understood") && exit 
+  (>&2  echo "ProEST: ERROR: Argument $1 was not understood") && exit 
   ;;
 
 esac
@@ -100,23 +112,35 @@ shift
 done
 
 
-# 2. Checking existence of variables
+
+# 2. Checking existence of variables and files
 ERROR=false
-[ -z "$DIM"     ] && (>&2  echo "ERROR: Argument --dim     was not set") && ERROR=true
-[ -z "$TOTAL"   ] && (>&2  echo "ERROR: Argument --total   was not set") && ERROR=true
-[ -z "$CONCAT"  ] && (>&2  echo "ERROR: Argument --concat  was not set") && ERROR=true
-[ -z "$TRAJ"    ] && (>&2  echo "ERROR: Argument --traj    was not set") && ERROR=true
-[ -z "$MASK"    ] && (>&2  echo "ERROR: Argument --mask    was not set") && ERROR=true
-[ -z "$PRMTOP"  ] && (>&2  echo "ERROR: Argument --prmtop  was not set") && ERROR=true
-[ -z "$PREFIX"  ] && (>&2  echo "ERROR: Argument --prefix  was not set") && ERROR=true
-[ -z "$OUTPUT"  ] && (>&2  echo "ERROR: Argument --output  was not set") && ERROR=true
-[ -z "$SAMPLES" ] && (>&2  echo "ERROR: Argument --samples was not set") && ERROR=true
+[ -z "$DIM"     ] && (>&2  echo "ProEST: ERROR: Argument --dim     was not set") && ERROR=true
+[ -z "$TOTAL"   ] && (>&2  echo "ProEST: ERROR: Argument --total   was not set") && ERROR=true
+[ -z "$CONCAT"  ] && (>&2  echo "ProEST: ERROR: Argument --concat  was not set") && ERROR=true
+[ -z "$TRAJ"    ] && (>&2  echo "ProEST: ERROR: Argument --traj    was not set") && ERROR=true
+[ -z "$MASK"    ] && (>&2  echo "ProEST: ERROR: Argument --mask    was not set") && ERROR=true
+[ -z "$PRMTOP"  ] && (>&2  echo "ProEST: ERROR: Argument --prmtop  was not set") && ERROR=true
+[ -z "$PREFIX"  ] && (>&2  echo "ProEST: ERROR: Argument --prefix  was not set") && ERROR=true
+[ -z "$OUTPUT"  ] && (>&2  echo "ProEST: ERROR: Argument --output  was not set") && ERROR=true
+[ -z "$SAMPLES" ] && (>&2  echo "ProEST: ERROR: Argument --samples was not set") && ERROR=true
 $ERROR && exit
 
-# 3. Checking cpptraj, ante-MMPBSA.py and python
-PTRAJ=$(command -v cpptraj) ||  PTRAJ=$(command -v ptraj) || (>&2  echo "ERROR: cpptraj/ptraj was not found. Please add it to the \$PATH variable and try again."&& exit)
+ERROR=false
+[ ! -f $PRMTOP     ] && (>&2  echo "ProEST: ERROR: File $PRMTOP was not found") && ERROR=true
+for i in $(seq 1 1 $TOTAL)
+do
+    trajfile=$(sed "s/X/$i/" <<< $TRAJ)
+    [ ! -f $trajfile ] && (>&2  echo "ProEST: ERROR: File $trajfile was not found") && ERROR=true
+done
+$ERROR && exit
 
-PYTHON=$(command -v python) || (>&2 echo "ERROR: python not found. Please add it to the \$PATH variable and try again." && exit)
+[ "$((2*$CONCAT))" -gt "$TOTAL" ] && (>&2  echo "ProEST: ERROR: TOTAL must be at twice CONCAT") && exit
+
+# 3. Checking cpptraj, ante-MMPBSA.py and python
+PTRAJ=$(command -v cpptraj) || (>&2 echo "ProEST: ERROR: cpptraj was not found. Please add it to the \$PATH variable and try again."&& exit)
+
+PYTHON=$(command -v python) || (>&2 echo "ProEST: ERROR: python not found. Please add it to the \$PATH variable and try again." && exit)
 echo "
 try:
     import numpy,sys,random
@@ -128,10 +152,14 @@ except:
 
 ANTEMMPBSA=$(command -v ante-MMPBSA.py) || (>&2  echo "ERROR: ante-MMPBSA.py was not found. Please add it to the \$PATH variable and try again."&& exit)
 
-# 4. Header of output and report
+# 4. Getting max dimension
+DIMLIST=$(sed "s/ /,/g" <<< "[$DIM]")
+MAXDIM=$($PYTHON -c "print max($DIMLIST)")
+
+# 5. Header of output and report
 echo "
 #
-#  ESSENTIAL SPACE CONVERGENCY TEST
+#  ProEST - Protein Essential Space Test
 #
 #  Using variables:
 #     AMBER prmtop:            $PRMTOP
@@ -163,7 +191,7 @@ echo "
 
 echo "
 
-  ESSENTIAL SPACE CONVERGENCY TEST
+  ProEST - Protein Essential Space Test
 
   Using variables:
      AMBER prmtop:            $PRMTOP
@@ -181,18 +209,13 @@ echo "
  
 "
 
-# 5. Getting max dimension
-DIMLIST=$(sed "s/ /,/g" <<< "[$DIM]")
-MAXDIM=$($PYTHON -c "print max($DIMLIST)")
-
-
 # 6. Converting topology file
 [ -f $PREFIX.prmtop ] && /bin/rm $PREFIX.prmtop
 $ANTEMMPBSA -p $PRMTOP -c $PREFIX.prmtop -s "!($MASK)" > /dev/null
 
 
 # 7. Creating reference from average of all DMs
-echo -n "Creating reference structure for PCA ... "
+echo -n " Creating reference structure for PCA ... "
 [ -f $PREFIX.script ] && /bin/rm $PREFIX.script
 for i in $(seq 1 1 $TOTAL)
 do
@@ -210,7 +233,7 @@ echo "OK"
 
 
 # 8. Rewritting
-echo -n "Rewritting aligned trajectories ........ "
+echo -n " Rewritting aligned trajectories ........ "
 for i in $(seq 1 1 $TOTAL)
 do
     trajfile=$(sed "s/X/$i/" <<< $TRAJ)
@@ -312,7 +335,7 @@ for i in range(len(pdf)):
 
 # 10. Big loop. Starts the sampling
 [ -f $PREFIX.samples.dat ] && /bin/rm $PREFIX.samples.dat
-echo "Starting the samples ... "
+echo " Starting the samples ... "
 p10=0; p20=0; p30=0; p40=0; p50=0; p60=0; p70=0; p80=0; p90=0
 
 for i in $(seq 1 1 $SAMPLES)
@@ -321,31 +344,31 @@ do
     percent=$($PYTHON -c "print int($i*100/$SAMPLES)")
     if   [ $percent -ge 90 ] && [ "$p90" == "0" ]  
     then 
-       echo '   90% '; p90=1
+       echo -n '   90% '; p90=1
     elif [ $percent -ge 80 ] && [ "$p80" == "0" ]
     then
-       echo '   80% '; p80=1
+       echo -n '   80% '; p80=1
     elif [ $percent -ge 70 ] && [ "$p70" == "0" ]
     then
-       echo '   70% '; p70=1
+       echo -n '   70% '; p70=1
     elif [ $percent -ge 60 ] && [ "$p60" == "0" ] 
     then
-       echo '   60% '; p60=1
+       echo -n '   60% '; p60=1
     elif [ $percent -ge 50 ] && [ "$p50" == "0" ]
     then
-       echo '   50% '; p50=1
+       echo -n '   50% '; p50=1
     elif [ $percent -ge 40 ] && [ "$p40" == "0" ]
     then
-       echo '   40% '; p40=1
+       echo -n '   40% '; p40=1
     elif [ $percent -ge 30 ] && [ "$p30" == "0" ]
     then
-       echo '   30% '; p30=1
+       echo -n '   30% '; p30=1
     elif [ $percent -ge 20 ] && [ "$p20" == "0" ]
     then
-       echo '   20% '; p20=1
+       echo -n '   20% '; p20=1
     elif [ $percent -ge 10 ] && [ "$p10" == "0" ]
     then
-       echo '   10% '; p10=1
+       echo -n '   10% '; p10=1
 
     fi
  
@@ -384,7 +407,7 @@ do
     /bin/rm $PREFIX.seq
 
 done
-echo '   100% OK'
+echo '   100%   OK'
 
 # 11. Making distributions
 for d in $DIM
@@ -400,10 +423,12 @@ done
 echo "" >>$OUTPUT
 
 rmsipfiles=""
+count=1
 for d in $DIM
 do
-    $PYTHON $PREFIX.distributions.py $d > $PREFIX.distributions.$d.dat
+    $PYTHON $PREFIX.distributions.py $count > $PREFIX.distributions.$d.dat
     rmsipfiles=$rmsipfiles" $PREFIX.distributions.$d.dat"
+    count=$(($count+1))
 done
 paste -d "" $rmsipfiles >> $OUTPUT
 
@@ -423,5 +448,5 @@ done
 /bin/rm $PREFIX.prmtop
 /bin/rm $PREFIX.samples.dat
 echo "
-  Program ended at $(date)
+ Calculation ended on $(date)
 "
