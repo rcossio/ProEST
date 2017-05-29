@@ -1,6 +1,11 @@
 # ProEST
 ProEST (Protein Essential Space Test) is a tool to check the convergence of the essential space of proteins from AMBER molecular dynamics
 
+# Download
+To download this branch (script+example) you should use the command
+
+     git clone https://github.com/rcossio/ProEST.git --branch release_v1.0
+
 # Usage
 To check usage please use the command 
 
