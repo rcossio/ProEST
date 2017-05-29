@@ -140,7 +140,7 @@ $ERROR && exit
 # 3. Checking cpptraj, ante-MMPBSA.py and python
 PTRAJ=$(command -v cpptraj) || (>&2 echo "ProEST: ERROR: cpptraj was not found. Please add it to the \$PATH variable and try again."&& exit)
 
-PYTHON=$(command -v python) || (>&2 echo "ProEST: ERROR: python not found. Please add it to the \$PATH variable and try again." && exit)
+PYTHON=$(command -v python2.7) || (>&2 echo "ProEST: ERROR: python not found. Please add it to the \$PATH variable and try again." && exit)
 echo "
 try:
     import numpy,sys,random
