@@ -3,20 +3,22 @@ ProEST (Protein Essential Space Test) is a tool to check the convergence of the 
 
 # Usage
 To check usage please use the command 
-```
-./ProEST.sh -h
-```
+
+     ./ProEST.sh -h
+
 or 
-```
-./ProEST.sh --help
-```
+
+     ./ProEST.sh --help
+
 # What does it do?
 This script reads trajectory files, aligns them to the first molecule and creates 
 an average structure which will be the new reference to realign trajectories.
+
 After rewriting aligned trajectories it starts a for-loop for each sample. 
 In each loop, it takes randomly an indicated number of trajectories and performs Combined 
-Essential Dynamics (i.e concatenated Principal Component Analysis) retrieving the indicated number 
-of vectors and calculating Root Mean Squared Inner Product.
+Essential Dynamics (i.e concatenated Principal Component Analysis) retrieving the indicated 
+number of vectors and calculating Root Mean Squared Inner Product.
+
 After the indicated samples have been made, the probability distribution function and 
 the cumulative distribution function are calculated.
 
