@@ -1,0 +1,26 @@
+
+
+  ProEST - Protein Essential Space Test
+
+  Using variables:
+     AMBER prmtop:            bpti.CA.prmtop
+     AMBER trajectories:      trajectories/bpti.CA.X.mdcrd
+     AMBER mask:              :4-55@CA
+     Trajectory analyser:     /usr/local/amber16/bin/cpptraj
+     Prmtop converter:        /usr/local/amber16/bin/ante-MMPBSA.py
+     Python package:          /usr/local/anaconda2/bin/python
+     Total number of DM:      20
+     Num. of concatenated DM: 4
+     RMSIP dimension:         1 3 4 (max. 4)
+     Temporary files prefix:  _TEMP_
+
+  Calculation started on dom may 28 21:47:06 ART 2017
+ 
+
+ Creating reference structure for PCA ... OK
+ Rewritting aligned trajectories ........ OK
+ Starting the samples ... 
+   10%    20%    30%    40%    50%    60%    70%    80%    90%    100%   OK
+
+ Calculation ended on dom may 28 21:47:23 ART 2017
+
