@@ -40,8 +40,8 @@ For more information please check the example/ folder or write us to
 
 or check the following publication 
 
-    "Cossio-Pérez, R., Palma, J., & Pierdominici-Sottile, G. (2017). Consistent principal component modes 
-    from molecular dynamics simulations of proteins. Journal of Chemical Information and Modeling."
+    Cossio-Pérez, R., Palma, J., & Pierdominici-Sottile, G. (2017). "Consistent principal component modes 
+    from molecular dynamics simulations of proteins". Journal of Chemical Information and Modeling.
 
 Cheers! 
 
