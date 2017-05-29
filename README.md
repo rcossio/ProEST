@@ -17,7 +17,7 @@ an average structure which will be the new reference to realign trajectories.
 After rewriting aligned trajectories it starts a for-loop for each sample. 
 In each loop, it takes randomly an indicated number of trajectories and performs Combined 
 Essential Dynamics (i.e concatenated Principal Component Analysis) retrieving the indicated 
-number of vectors and calculating Root Mean Squared Inner Product.
+number of vectors and calculating Root Mean Square Inner Product.
 
 After the indicated samples have been made, the probability distribution function and 
 the cumulative distribution function are calculated.
