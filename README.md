@@ -4,16 +4,16 @@ ProEST (Protein Essential Space Test) is a tool to check the convergence of the 
 # Download
 To download this branch (script+example) you should use the command
 
-     git clone https://github.com/rcossio/ProEST.git --branch release_v1.0
+     git clone https://github.com/rcossio/ProEST.git
 
 # Usage
 To check usage please use the command 
 
-     ./ProEST.sh -h
+     ./ProEST -h
 
 or 
 
-     ./ProEST.sh --help
+     ./ProEST --help
 
 # What does it do?
 This script reads trajectory files, aligns them to the first molecule and creates 
@@ -28,7 +28,7 @@ After the indicated samples have been made, the probability distribution functio
 the cumulative distribution function are calculated.
 
 # Dependencies
-You should have installed AmberTools (available at http://ambermd.org/), in particular the script
+You should have installed AmberTools (available at http://ambermd.org/). In particular the script
 uses Cpptraj and ante-MMPBSA.py
 
 Also, a Python2 version is needed with access to Sys, Numpy and Random libraries. 

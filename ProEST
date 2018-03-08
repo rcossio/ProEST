@@ -29,7 +29,7 @@ case "$1" in
   
   Usage: 
 
-    ./ProEST.sh --dim DIM --total TOTAL --concat CONCAT --traj TRAJECTORY.X --mask MASK --prmtop PRMTOP --prefix PREFIX --output OUTPUT --samples SAMPLES
+    ./ProEST --dim DIM --total TOTAL --concat CONCAT --traj TRAJECTORY.X --mask MASK --prmtop PRMTOP --prefix PREFIX --output OUTPUT --samples SAMPLES
  
   where DIM is the list of dimensions of the protein subspace used in the RMSIP.
         TOTAL is the total number of molecular dynamics. It should be at least twice the CONCAT number.

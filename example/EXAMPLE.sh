@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# This is an example of ProEST.sh usage
+# This is an example of ProEST usage
 # In this example, 20 simulations of BPTI have been made and, to avoid heavy files,
 # only the coordinates of alpha carbons (CA) have been saved in trajectory files
 # A parameter-topology file that matches the atoms of the trajectories has been 
@@ -16,11 +16,11 @@
 
 # To understand the usage of the script please run
 #
-#     ../ProEST.sh -h
+#     ../ProEST -h
 #
 # or
 #
-#     ../ProEST.sh --help
+#     ../ProEST --help
 #
 #
 #  For more information please write us to 
@@ -38,5 +38,5 @@
 #
 
 
-   ../ProEST.sh --prmtop  bpti.CA.prmtop  --traj trajectories/bpti.CA.X.mdcrd --mask ":4-55@CA" --total 20 --concat 4 --dim "1 3 4" --prefix _TEMP_ --output bpti.ES.dat --samples 20 
+   ../ProEST --prmtop  bpti.CA.prmtop  --traj trajectories/bpti.CA.X.mdcrd --mask ":4-55@CA" --total 20 --concat 4 --dim "1 3 4" --prefix _TEMP_ --output bpti.ES.dat --samples 20 
 
