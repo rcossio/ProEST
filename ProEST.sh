@@ -171,6 +171,7 @@ echo "
 #     Total number of DM:      $TOTAL
 #     Num. of concatenated DM: $CONCAT
 #     RMSIP dimension:         $DIM (max. $MAXDIM)
+#     Number of samples:       $SAMPLES
 #     Temporary files prefix:  $PREFIX
 #
 #  For more information please write us to 
@@ -203,6 +204,7 @@ echo "
      Total number of DM:      $TOTAL
      Num. of concatenated DM: $CONCAT
      RMSIP dimension:         $DIM (max. $MAXDIM)
+     Number of samples:       $SAMPLES
      Temporary files prefix:  $PREFIX
 
   Calculation started on $(date)

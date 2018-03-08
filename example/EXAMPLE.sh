@@ -16,11 +16,11 @@
 
 # To understand the usage of the script please run
 #
-#     ../ProES.sh -h
+#     ../ProEST.sh -h
 #
 # or
 #
-#     ../ProES.sh --help
+#     ../ProEST.sh --help
 #
 #
 #  For more information please write us to 
@@ -38,5 +38,5 @@
 #
 
 
-   ../ProES.sh --prmtop  bpti.CA.prmtop  --traj trajectories/bpti.CA.X.mdcrd --mask ":4-55@CA" --total 20 --concat 4 --dim "1 3 4" --prefix _TEMP_ --output bpti.ES.dat --samples 20 
+   ../ProEST.sh --prmtop  bpti.CA.prmtop  --traj trajectories/bpti.CA.X.mdcrd --mask ":4-55@CA" --total 20 --concat 4 --dim "1 3 4" --prefix _TEMP_ --output bpti.ES.dat --samples 20 
 
