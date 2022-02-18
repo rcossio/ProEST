@@ -36,7 +36,7 @@ Also, a Python2 version is needed with access to Sys, Numpy and Random libraries
 # More information
 For more information please check the example/ folder or write us to 
 
-     sciprot.unq@gmail.com 
+     rodrigoperez93@gmail.com
 
 or check the following publication 
 
